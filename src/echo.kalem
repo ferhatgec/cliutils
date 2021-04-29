@@ -1,0 +1,59 @@
+// CLIUtils - echo
+//
+// MIT License
+//
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+//
+
+!required_flag("source")
+
+!include_dir(".")
+
+#include {
+    <ios>
+    <sys>
+    <variables>
+}
+
+!flag {
+    "output=echo"
+}
+
+@main int {
+    if argc < 2 {
+        @ios::exit(1)
+    }
+
+    string data nil
+    unsign i 1
+
+    loop {
+        if i == argc {
+            break
+        }
+
+        if argv[i][0] eq '$' {
+            if std::basic_string(argv[i]).length() < 2 {
+                @data.push_back('$')
+            }
+            els {
+                @data.append(ios::getenvi(std::basic_string(argv[i]).erase(0, 1)))
+            }
+        }
+        els {
+            @data.append(argv[i])
+        }
+
+        if i + 1 uneq argc {
+            @data.push_back(' ')
+        }
+
+        ++i
+    }
+
+    @ios::println(data)
+
+    @return 0
+}
