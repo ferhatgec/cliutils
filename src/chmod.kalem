@@ -1,0 +1,58 @@
+// CLIUtils - chmod
+//
+// MIT License
+//
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+//
+
+!required_flag("source")
+
+!include_dir(".")
+
+#include {
+    <ios>
+    <stdstr>
+    <stream>
+    <vect>
+    <sys>
+    <filesys>
+    <variables>
+}
+
+#import <sys/stat.h>
+
+!flag {
+    "cpp-output=true"
+    "output=chmod"
+}
+
+#defn {
+    PERM "rwxrwxrwx"
+}
+
+@to_mode_t(string perms) mode_t? {
+    @return (((PERM[0]=='r') * 4 | (PERM[1] == 'w') * 2 | (PERM[2] == 'x')) << 6) | (((PERM[3] == 'r') * 4 | (PERM[4] == 'w') * 2 | (PERM[5] == 'x')) << 3) | (((PERM[6] == 'r') * 4 | (PERM[7] == 'w') * 2 | (PERM[8] == 'x')))
+}
+
+@main int {
+    if argc < 3 {
+        @ios::exit(1)
+    }
+
+    string mode nil
+    string data nil
+
+    @mode.append(argv[1])
+    @data.append(argv[2])
+
+    if chmod(data.c_str(), to_mode_t(mode)) < 0 {
+        @ios::print("An error occured", "[" + mode + " : " + data + "]", "->")
+        @ios::println(to_mode_t(mode))
+
+        @ios::exit(1)
+    }
+
+    @return 0
+}
