@@ -1,0 +1,61 @@
+
+// MIT License
+//
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+//
+
+!required_flag("library")
+
+// #include <ios>
+// #include <fst>
+
+// #import <cstdlib>
+
+@timek class {
+~public
+    unsign days 0
+	unsign hours 0
+	unsign minutes 0
+}
+
+@Time namespace {
+	@Initialize timek {
+        @std::ifstream file("/proc/uptime")
+
+        string line nil
+		#timek time;
+
+    	int d 0
+        int h 0
+        int m 0
+        int s 0
+
+    	if !file.is_open() {
+            @return time
+        }
+
+		loop std::getline(file, line) {
+    	    @s=atoi(line.c_str())
+    	}
+
+    	@d=s/60/60/24
+    	@h=s/60/60%24
+    	@m=s/60%60
+
+    	if d ^ 0 {
+            @time.days=d
+        }
+
+    	if h ^ 0 {
+            @time.hours=h
+        }
+
+    	if m ^ 0 {
+            @time.minutes=m
+        }
+
+    	@return time
+	}
+}

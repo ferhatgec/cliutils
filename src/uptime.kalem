@@ -1,0 +1,46 @@
+// CLIUtils - uptime
+//
+// MIT License
+//
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+//
+
+!required_flag("source")
+
+!include_dir(".")
+!include_dir("../lib/")
+
+!add_source("../lib/time")
+
+#include {
+    <ios>
+    <sys>
+    <fst>
+    <variables>
+
+    <time>
+}
+
+!flag {
+    "output=uptime"
+}
+
+@main int {
+    #timek upt;
+
+    @upt=Time::Initialize()
+
+    if upt.days uneq 0 {
+        @ios::print(upt.days, "\b\033[0;32md")
+    }
+
+    if upt.hours uneq 0 {
+        @ios::print("\b\033[0;94m", upt.hours, "\bh")
+    }
+
+    @ios::println("\b\033[0;95m", upt.minutes, "\bm\033[0m")
+
+    @return 0
+}
