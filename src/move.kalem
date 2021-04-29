@@ -1,0 +1,59 @@
+// CLIUtils - move
+//
+// MIT License
+//
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+//
+
+!required_flag("source")
+
+!include_dir(".")
+
+#include {
+    <ios>
+    <sys>
+    <fst>
+    <filesys>
+    <variables>
+}
+
+!flag {
+    "output=move"
+}
+
+@main int {
+    if argc < 3 {
+        @ios::exit(1)
+    }
+
+    string from nil
+    string to nil
+
+    @from.append(argv[1])
+    @to.append(argv[2])
+
+    if std::filesystem::exists(from) {
+        // Check is file/directory exists (except . and ..) and
+        // print error instead of throwing.
+        if to.back() uneq '.' and to.back() uneq '/' and std::filesystem::exists(to) {
+            @ios::println("'" + from + "'", "->", "'" + to + "'", "already exists.")
+            @ios::exit(1)
+        }
+
+        // copy file ../.
+        if to.back() eq '.' {
+            @to.push_back('/')
+        }
+
+        // copy file ../
+        if to.back() eq '/' {
+            @to.append(std::filesystem::path(from).filename())
+        }
+
+        @std::filesystem::rename(from, to)
+    }
+
+    @return 0
+}
