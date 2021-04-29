@@ -1,0 +1,28 @@
+// CLIUtils - pwd
+//
+// MIT License
+//
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+//
+
+!required_flag("source")
+
+!include_dir(".")
+
+#include {
+    <ios>
+    <variables>
+    <filesys>
+}
+
+!flag {
+    "output=pwd"
+}
+
+@main int {
+    @ios::println(std::filesystem::current_path().string())
+
+    @return 0
+}
